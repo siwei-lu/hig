@@ -9,6 +9,7 @@ fn cli() -> Command {
         .arg_required_else_help(true)
         .subcommand(cmd::feature::new())
         .subcommand(cmd::remove::new())
+        .subcommand(cmd::reset::new())
 }
 
 fn main() {
@@ -21,6 +22,9 @@ fn main() {
         }
         Some((cmd::remove::NAME, _)) => {
             cmd::remove::run().unwrap();
+        }
+        Some((cmd::reset::NAME, _)) => {
+            cmd::reset::run().unwrap();
         }
         _ => {
             println!("No command matched");
