@@ -4,8 +4,8 @@ use hig::cmd;
 fn cli() -> Command {
     Command::new("hig")
         .version("0.1.0")
-        .about("A CLI for Better Git")
-        .author("Siwei Lu <me@siwei.lu>")
+        .about("A CLI for Better Git Experience")
+        .author("Siwei LU <me@siwei.lu>")
         .arg_required_else_help(true)
         .subcommand(cmd::feature::new())
         .subcommand(cmd::remove::new())
