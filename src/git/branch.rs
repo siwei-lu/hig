@@ -57,3 +57,13 @@ pub fn remove(name: &str) -> Result<(), Error> {
     let mut branch = repo.find_branch(name, BranchType::Local)?;
     branch.delete()
 }
+
+pub fn is_exist(name: &str) -> bool {
+    let repo = match repo::current() {
+        Ok(it) => it,
+        Err(_) => return false,
+    };
+
+    let branch = repo.find_branch(name, BranchType::Local);
+    branch.is_ok()
+}

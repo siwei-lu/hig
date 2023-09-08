@@ -1,7 +1,7 @@
 use clap::{arg, error::Result, Command};
 use git2::Error;
 
-use crate::git;
+use crate::git::branch;
 
 pub const NAME: &str = "feature";
 
@@ -15,9 +15,12 @@ pub fn new() -> Command {
 
 pub fn run(name: &str) -> Result<(), Error> {
     let branch_name = new_branch_name(name);
-    git::branch::new(&branch_name)?;
-    git::branch::checkout(&branch_name)?;
 
+    if !branch::is_exist(&branch_name) {
+        branch::new(&branch_name)?;
+    }
+
+    branch::checkout(&branch_name)?;
     Ok(())
 }
 
