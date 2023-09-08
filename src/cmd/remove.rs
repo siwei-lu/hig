@@ -6,16 +6,17 @@ use crate::git::branch;
 pub const NAME: &str = "remove";
 
 pub fn new() -> Command {
-  Command::new("remove")
-    .about("Remove the current branch")
+    Command::new("remove")
+        .alias("rm")
+        .about("Remove the current branch")
 }
 
 pub fn run() -> Result<(), Error> {
-  let current = branch::current()?;
-  let main_branch = branch::main();
+    let current = branch::current()?;
+    let main_branch = branch::main();
 
-  branch::checkout(&main_branch)?;
-  branch::remove(&current)?;
+    branch::checkout(&main_branch)?;
+    branch::remove(&current)?;
 
-  Ok(())
+    Ok(())
 }
