@@ -1,4 +1,7 @@
-use clap::{arg, Command};
+use clap::{arg, error::Result, Command};
+use git2::Error;
+
+use crate::git;
 
 pub const NAME: &str = "feature";
 
@@ -9,6 +12,14 @@ pub fn new() -> Command {
         .arg(arg!(<name> "The name of the feature branch"))
 }
 
-pub fn run(name: &str) {
-    println!("Creating a new feature branch: {name}")
+pub fn run(name: &str) -> Result<(), Error> {
+    let branch_name = new_branch_name(name);
+    git::branch::new(&branch_name)?;
+    git::branch::checkout(&branch_name)?;
+    
+    Ok(())
+}
+
+fn new_branch_name(name: &str) -> String {
+    format!("feature/NEUT-{}", name)
 }
