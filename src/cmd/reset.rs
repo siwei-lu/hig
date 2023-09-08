@@ -12,7 +12,7 @@ pub fn new() -> Command {
 }
 
 pub fn run() -> Result<(), Error> {
-    let current = branch::current()?;
+    let current = branch::current().ok_or(Error::from_str("No current branch"))?;
     let main_branch = branch::main();
 
     branch::checkout(&main_branch)?;
