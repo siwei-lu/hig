@@ -8,6 +8,7 @@ fn cli() -> Command {
         .author("Siwei Lu <me@siwei.lu>")
         .arg_required_else_help(true)
         .subcommand(cmd::feature::new())
+        .subcommand(cmd::remove::new())
 }
 
 fn main() {
@@ -16,7 +17,10 @@ fn main() {
     match matched.subcommand() {
         Some((cmd::feature::NAME, feature)) => {
             let name = feature.get_one::<String>("name").unwrap();
-            cmd::feature::run(name);
+            cmd::feature::run(name).unwrap();
+        }
+        Some((cmd::remove::NAME, _)) => {
+            cmd::remove::run().unwrap();
         }
         _ => {
             println!("No command matched");

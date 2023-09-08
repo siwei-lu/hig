@@ -1,4 +1,4 @@
-use git2::Error;
+use git2::{Error, BranchType};
 
 use super::repo;
 
@@ -25,4 +25,17 @@ pub fn checkout(name: &str) -> Result<(), Error> {
     repo.checkout_head(Some(&mut builder))?;
 
     Ok(())
+}
+
+pub fn current() -> Result<String, Error> {
+    let repo = repo::current()?;
+    let head = repo.head()?;
+    let shorthand = head.shorthand().unwrap();
+    Ok(shorthand.to_string())
+}
+
+pub fn remove(name: &str) -> Result<(), Error> {
+    let repo = repo::current()?;
+    let mut branch = repo.find_branch(name, BranchType::Local)?;
+    branch.delete()
 }
