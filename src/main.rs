@@ -31,9 +31,7 @@ enum Commands {
 }
 
 #[derive(Parser)]
-#[command(author = "Siwei LU <me@siwei.lu>")]
-#[command(version)]
-#[command(about = "A CLI for Better Git Experience")]
+#[command(author, version, about)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,

@@ -2,6 +2,8 @@
 name = "hig"
 version = "0.1.0"
 edition = "2021"
+authors = ["Siwei LU <me@siwei.lu>"]
+description = "A CLI for Better Git Experience"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
