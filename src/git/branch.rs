@@ -8,7 +8,7 @@ pub fn main() -> String {
         Err(_) => return "master".to_string(),
     };
 
-    let refs_patterns = [
+    const REFS_PATTERNS: [&str; 6] = [
         "refs/heads/main",
         "refs/heads/trunk",
         "refs/remotes/origin/main",
@@ -17,7 +17,7 @@ pub fn main() -> String {
         "refs/remotes/upstream/trunk",
     ];
 
-    for pattern in refs_patterns.iter() {
+    for pattern in REFS_PATTERNS.iter() {
         if let Ok(reference) = repo.find_reference(pattern) {
             return reference.shorthand().unwrap_or("master").to_string();
         }
