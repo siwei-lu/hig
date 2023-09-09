@@ -1,16 +1,5 @@
 use crate::Config;
 use anyhow::Result;
-use clap::{arg, Command};
-
-pub const NAME: &str = "config";
-
-pub fn new() -> Command {
-    Command::new(NAME)
-        .about("Configure the tool")
-        .arg_required_else_help(true)
-        .arg(arg!(<key> "The key to set"))
-        .arg(arg!(<value> "The value to set"))
-}
 
 pub fn run(key: &str, value: &str) -> Result<()> {
     let mut conf = Config::load();
