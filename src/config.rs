@@ -1,19 +1,19 @@
-use std::{error::Error, path::PathBuf};
+use std::{error::Error, fs, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
-struct FeatureConfig {
-    prefix: String,
+pub struct FeatureConfig {
+    pub prefix: String,
 }
 
 #[derive(Deserialize, Serialize)]
 pub struct Config {
-    feature: FeatureConfig,
+    pub feature: FeatureConfig,
 }
 
 impl Config {
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             feature: FeatureConfig {
                 prefix: "feature/".to_string(),
@@ -25,20 +25,26 @@ impl Config {
         PathBuf::from("./.git/hig.config")
     }
 
-    pub fn load() -> Option<Self> {
+    pub fn load() -> Self {
         let path = Self::path();
         if !path.exists() {
-            return None;
+            return Self::new();
         }
 
-        let content = std::fs::read_to_string(path).ok()?;
-        toml::from_str(&content).ok()
+        let content = match fs::read_to_string(path) {
+            Ok(content) => content,
+            Err(_) => return Self::new(),
+        };
+
+        match toml::from_str(&content) {
+            Ok(config) => config,
+            Err(_) => Self::new(),
+        }
     }
 
     pub fn save(&self) -> Result<(), Box<dyn Error>> {
         let content = toml::to_string(self)?;
-        std::fs::write(Self::path(), content)?;
-
+        fs::write(Self::path(), content)?;
         Ok(())
     }
 }

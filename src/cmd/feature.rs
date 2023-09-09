@@ -1,5 +1,6 @@
+use std::error::Error;
+
 use clap::{arg, error::Result, Command};
-use git2::Error;
 
 use crate::git::branch;
 
@@ -13,7 +14,7 @@ pub fn new() -> Command {
         .arg(arg!(<name> "The name of the feature branch"))
 }
 
-pub fn run(name: &str) -> Result<(), Error> {
+pub fn run(name: &str) -> Result<(), Box<dyn Error>> {
     let branch_name = new_branch_name(name);
 
     if !branch::is_exist(&branch_name) {

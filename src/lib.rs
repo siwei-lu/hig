@@ -1,3 +1,5 @@
 pub mod cmd;
 pub mod git;
-pub mod config;
+
+mod config;
+pub use config::Config;

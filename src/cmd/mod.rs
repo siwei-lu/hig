@@ -1,3 +1,4 @@
+pub mod config;
 pub mod feature;
-pub mod remove;
 pub mod reset;
+pub mod rm;
