@@ -26,7 +26,7 @@ enum Commands {
         /// The key to set
         key: String,
         /// The value to set
-        value: String,
+        value: Option<String>,
     },
 }
 
