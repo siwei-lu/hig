@@ -2,7 +2,7 @@ use std::error::Error;
 
 use clap::{arg, error::Result, Command};
 
-use crate::git::branch;
+use crate::{git::branch, Config};
 
 pub const NAME: &str = "feature";
 
@@ -15,7 +15,8 @@ pub fn new() -> Command {
 }
 
 pub fn run(name: &str) -> Result<(), Box<dyn Error>> {
-    let branch_name = new_branch_name(name);
+    let conf = Config::load();
+    let branch_name = new_branch_name(&conf.feature.prefix, name);
 
     if !branch::is_exist(&branch_name) {
         branch::new(&branch_name)?;
@@ -25,6 +26,6 @@ pub fn run(name: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn new_branch_name(name: &str) -> String {
-    format!("feature/NEUT-{}", name)
+fn new_branch_name(prefix: &str, name: &str) -> String {
+    format!("{prefix}{name}")
 }
