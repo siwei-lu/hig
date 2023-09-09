@@ -1,8 +1,6 @@
-use std::error::Error;
-
-use clap::{arg, Command};
-
 use crate::Config;
+use anyhow::Result;
+use clap::{arg, Command};
 
 pub const NAME: &str = "config";
 
@@ -14,7 +12,7 @@ pub fn new() -> Command {
         .arg(arg!(<value> "The value to set"))
 }
 
-pub fn run(key: &str, value: &str) -> Result<(), Box<dyn Error>> {
+pub fn run(key: &str, value: &str) -> Result<()> {
     let mut conf = Config::load();
 
     match key {

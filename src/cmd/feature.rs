@@ -1,8 +1,6 @@
-use std::error::Error;
-
-use clap::{arg, error::Result, Command};
-
 use crate::{git::branch, Config};
+use anyhow::Result;
+use clap::{arg, Command};
 
 pub const NAME: &str = "feature";
 
@@ -14,7 +12,7 @@ pub fn new() -> Command {
         .arg(arg!(<name> "The name of the feature branch"))
 }
 
-pub fn run(name: &str) -> Result<(), Box<dyn Error>> {
+pub fn run(name: &str) -> Result<()> {
     let conf = Config::load();
     let branch_name = new_branch_name(&conf.feature.prefix, name);
 

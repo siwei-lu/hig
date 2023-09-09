@@ -1,4 +1,5 @@
-use git2::{BranchType, Error};
+use anyhow::Result;
+use git2::BranchType;
 
 use super::repo;
 
@@ -26,7 +27,7 @@ pub fn main() -> String {
     "master".to_string()
 }
 
-pub fn new(name: &str) -> Result<(), Error> {
+pub fn new(name: &str) -> Result<()> {
     let repo = repo::current()?;
     let target = repo.head()?.peel_to_commit()?;
 
@@ -34,7 +35,7 @@ pub fn new(name: &str) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn checkout(name: &str) -> Result<(), Error> {
+pub fn checkout(name: &str) -> Result<()> {
     let repo = repo::current()?;
     let branch_ref = format!("refs/heads/{}", name);
     repo.set_head(&branch_ref)?;
@@ -52,10 +53,10 @@ pub fn current() -> Option<String> {
     head.shorthand().map(|s| s.to_string())
 }
 
-pub fn remove(name: &str) -> Result<(), Error> {
+pub fn remove(name: &str) -> Result<()> {
     let repo = repo::current()?;
     let mut branch = repo.find_branch(name, BranchType::Local)?;
-    branch.delete()
+    branch.delete().map_err(Into::into)
 }
 
 pub fn is_exist(name: &str) -> bool {

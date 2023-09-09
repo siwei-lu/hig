@@ -1,6 +1,6 @@
-use std::{error::Error, fs, path::PathBuf};
-
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use std::{fs, path::PathBuf};
 
 #[derive(Deserialize, Serialize)]
 pub struct FeatureConfig {
@@ -42,7 +42,7 @@ impl Config {
         }
     }
 
-    pub fn save(&self) -> Result<(), Box<dyn Error>> {
+    pub fn save(&self) -> Result<()> {
         let content = toml::to_string(self)?;
         fs::write(Self::path(), content)?;
         Ok(())
