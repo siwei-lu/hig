@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 clap = "4.4.2"
 git2 = "0.18.0"
+serde = { version = "1.0.188", features = ["derive"] }
+toml = "0.7.8"
