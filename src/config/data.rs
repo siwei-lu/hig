@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize)]
 pub struct Branch {
     pub prefix: String,
+    pub upstream: Option<String>,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -15,6 +16,7 @@ impl Data {
         Self {
             feature: Branch {
                 prefix: "feature/".to_string(),
+                upstream: None,
             },
         }
     }
