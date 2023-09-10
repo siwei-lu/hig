@@ -1,14 +1,7 @@
 use anyhow::Result;
-use git2::BranchType;
+use git2::{BranchType, Repository};
 
-use super::repo;
-
-pub fn main() -> String {
-    let repo = match repo::current() {
-        Ok(repo) => repo,
-        Err(_) => return "master".to_string(),
-    };
-
+pub fn main_of_repo(repo: &Repository) -> String {
     const REFS_PATTERNS: [&str; 6] = [
         "refs/heads/main",
         "refs/heads/trunk",
@@ -20,23 +13,21 @@ pub fn main() -> String {
 
     for pattern in REFS_PATTERNS.iter() {
         if let Ok(reference) = repo.find_reference(pattern) {
-            return reference.shorthand().unwrap_or("master").to_string();
+            let name = reference.shorthand().unwrap_or("master");
+            return name.to_string();
         }
     }
 
     "master".to_string()
 }
 
-pub fn new(name: &str) -> Result<()> {
-    let repo = repo::current()?;
+pub fn new_in_repo(name: &str, repo: &Repository) -> Result<()> {
     let target = repo.head()?.peel_to_commit()?;
-
     repo.branch(name, &target, false)?;
     Ok(())
 }
 
-pub fn checkout(name: &str) -> Result<()> {
-    let repo = repo::current()?;
+pub fn checkout_in_repo(name: &str, repo: &Repository) -> Result<()> {
     let branch_ref = format!("refs/heads/{}", name);
     repo.set_head(&branch_ref)?;
 
@@ -47,24 +38,18 @@ pub fn checkout(name: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn current() -> Option<String> {
-    let repo = repo::current().ok()?;
+pub fn current_in_repo(repo: &Repository) -> Option<String> {
     let head = repo.head().ok()?;
-    head.shorthand().map(|s| s.to_string())
+    let result = head.shorthand();
+    result.map(Into::into)
 }
 
-pub fn remove(name: &str) -> Result<()> {
-    let repo = repo::current()?;
+pub fn remove_from_repo(name: &str, repo: &Repository) -> Result<()> {
     let mut branch = repo.find_branch(name, BranchType::Local)?;
     branch.delete().map_err(Into::into)
 }
 
-pub fn is_exist(name: &str) -> bool {
-    let repo = match repo::current() {
-        Ok(it) => it,
-        Err(_) => return false,
-    };
-
+pub fn is_exist_in_repo(name: &str, repo: &Repository) -> bool {
     let branch = repo.find_branch(name, BranchType::Local);
     branch.is_ok()
 }

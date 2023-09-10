@@ -1,14 +1,15 @@
 use std::fmt::Display;
 
-use crate::Config;
+use crate::{git::repo, Config};
 use anyhow::Result;
 
 pub fn run(key: &str, value: &Option<String>) -> Result<()> {
-    let mut conf = Config::load();
+    let repo = repo::current()?;
+    let mut conf = Config::load(&repo);
 
     match key {
         "feature.prefix" => {
-            handle(&mut conf.feature.prefix, value);
+            handle(&mut conf.data.feature.prefix, value);
         }
         _ => return Ok(()),
     }

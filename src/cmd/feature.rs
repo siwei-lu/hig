@@ -1,15 +1,19 @@
-use crate::{git::branch, Config};
+use crate::{
+    git::{self, branch},
+    Config,
+};
 use anyhow::Result;
 
 pub fn run(name: &str) -> Result<()> {
-    let conf = Config::load();
-    let branch_name = new_branch_name(&conf.feature.prefix, name);
+    let repo = git::repo::current()?;
+    let conf = Config::load(&repo);
+    let branch_name = new_branch_name(&conf.data.feature.prefix, name);
 
-    if !branch::is_exist(&branch_name) {
-        branch::new(&branch_name)?;
+    if !branch::is_exist_in_repo(&branch_name, &repo) {
+        branch::new_in_repo(&branch_name, &repo)?;
     }
 
-    branch::checkout(&branch_name)?;
+    branch::checkout_in_repo(&branch_name, &repo)?;
     Ok(())
 }
 
