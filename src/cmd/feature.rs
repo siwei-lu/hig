@@ -7,12 +7,18 @@ pub fn run(name: &str) -> Result<()> {
     let conf = Config::load(&repo);
     let branch_name = new_branch_name(&conf.data.feature.prefix, name);
 
-    let branch = match repo.find_branch(&branch_name, BranchType::Local) {
+    let mut branch = match repo.find_branch(&branch_name, BranchType::Local) {
         Ok(branch) => branch,
         Err(_) => repo.new_branch(&branch_name)?,
     };
 
-    repo.checkout(&branch)
+    repo.checkout(&branch)?;
+
+    if let Some(upstream) = conf.data.feature.upstream {
+        branch.set_upstream(Some(&upstream))?;
+    }
+
+    Ok(())
 }
 
 fn new_branch_name(prefix: &str, name: &str) -> String {

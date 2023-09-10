@@ -1,5 +1,5 @@
-use crate::git::repository::RepoExt;
-use anyhow::Result;
+use crate::{git::repository::RepoExt, Config};
+use anyhow::{Ok, Result};
 use git2::Repository;
 
 pub fn run() -> Result<()> {
@@ -11,6 +11,13 @@ pub fn run() -> Result<()> {
     repo.checkout(&master)?;
     head.delete()?;
 
-    let head = repo.new_branch(&head_name)?;
-    repo.checkout(&head)
+    let mut head = repo.new_branch(&head_name)?;
+    repo.checkout(&head)?;
+
+    let conf = Config::load(&repo);
+    if let Some(upstream) = conf.data.feature.upstream {
+        head.set_upstream(Some(&upstream))?;
+    }
+
+    Ok(())
 }
