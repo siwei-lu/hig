@@ -12,4 +12,5 @@ anyhow = "1.0.75"
 clap = { version = "4.4.2", features = ["derive"] }
 git2 = "0.18.0"
 serde = { version = "1.0.188", features = ["derive"] }
+thiserror = "1.0.48"
 toml = "0.7.8"

@@ -1,14 +1,13 @@
-use crate::git::{branch, repo};
 use anyhow::Result;
+use git2::Repository;
+
+use crate::git::repository::RepoExt;
 
 pub fn run() -> Result<()> {
-    let repo = repo::current()?;
-    let current =
-        branch::current_in_repo(&repo).ok_or(git2::Error::from_str("No current branch"))?;
-    let main_branch = branch::main_of_repo(&repo);
+    let repo = Repository::current()?;
+    let master = repo.master()?;
+    let mut head = repo.head_branch()?;
 
-    branch::checkout_in_repo(&main_branch, &repo)?;
-    branch::remove_from_repo(&current, &repo)?;
-
-    Ok(())
+    repo.checkout(&master)?;
+    head.delete().map_err(Into::into)
 }

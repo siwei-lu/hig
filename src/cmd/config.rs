@@ -1,10 +1,11 @@
 use std::fmt::Display;
 
-use crate::{git::repo, Config};
+use crate::{git::repository::RepoExt, Config};
 use anyhow::Result;
+use git2::Repository;
 
 pub fn run(key: &str, value: &Option<String>) -> Result<()> {
-    let repo = repo::current()?;
+    let repo = Repository::current()?;
     let mut conf = Config::load(&repo);
 
     match key {
