@@ -45,6 +45,9 @@ enum Commands {
         #[arg(short = 'g', long = "global", default_value_t = false)]
         is_global: bool,
     },
+
+    #[command(about = "Create a new pull request")]
+    Pr,
 }
 
 #[derive(Parser)]
@@ -54,7 +57,8 @@ struct Cli {
     command: Commands,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let cli = Cli::parse();
     let result = match cli.command {
         Commands::Feature { name } => cmd::branch::run(&name, BranchType::Feature),
@@ -75,6 +79,7 @@ fn main() {
 
             cmd::config::run(&key, &value, t)
         }
+        Commands::Pr => cmd::pr::run().await,
     };
 
     if let Err(e) = result {

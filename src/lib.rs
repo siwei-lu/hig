@@ -1,5 +1,6 @@
 pub mod cmd;
 pub mod git;
+pub mod platform;
 
 mod config;
 pub use config::BranchType;
