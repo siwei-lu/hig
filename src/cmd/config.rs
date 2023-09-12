@@ -9,28 +9,21 @@ pub fn run(key: &str, value: &Option<String>) -> Result<()> {
     let mut conf = Config::load(&repo);
 
     match key {
-        "feature.prefix" => {
-            handle_option(&mut conf.data.feature.prefix, value);
+        "feature.prefix" => handle(&mut conf.data.feature.prefix, value),
+        "feature.upstream" => handle(&mut conf.data.feature.upstream, value),
+        "hotfix.prefix" => handle(&mut conf.data.hotfix.prefix, value),
+        "hotfix.upstream" => handle(&mut conf.data.hotfix.upstream, value),
+        "release.prefix" => handle(&mut conf.data.release.prefix, value),
+        "release.upstream" => handle(&mut conf.data.release.upstream, value),
+        _ => {
+            return Ok(());
         }
-        "feature.upstream" => {
-            handle_option(&mut conf.data.feature.upstream, value);
-        }
-        _ => return Ok(()),
     }
 
     conf.save()
 }
 
-fn _handle<T: Clone + Display>(data: &mut T, value: &Option<T>) {
-    if let Some(value) = value {
-        *data = value.clone();
-        return;
-    }
-
-    println!("{}", data)
-}
-
-fn handle_option<T: Clone + Display>(data: &mut Option<T>, value: &Option<T>) {
+fn handle<T: Clone + Display>(data: &mut Option<T>, value: &Option<T>) {
     if let Some(value) = value {
         *data = Some(value.clone());
         return;
