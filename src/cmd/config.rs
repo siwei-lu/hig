@@ -10,7 +10,7 @@ pub fn run(key: &str, value: &Option<String>) -> Result<()> {
 
     match key {
         "feature.prefix" => {
-            handle(&mut conf.data.feature.prefix, value);
+            handle_option(&mut conf.data.feature.prefix, value);
         }
         "feature.upstream" => {
             handle_option(&mut conf.data.feature.upstream, value);
@@ -21,7 +21,7 @@ pub fn run(key: &str, value: &Option<String>) -> Result<()> {
     conf.save()
 }
 
-fn handle<T: Clone + Display>(data: &mut T, value: &Option<T>) {
+fn _handle<T: Clone + Display>(data: &mut T, value: &Option<T>) {
     if let Some(value) = value {
         *data = value.clone();
         return;
