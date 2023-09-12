@@ -1,12 +1,15 @@
 use std::fmt::Display;
 
-use crate::{git::repository::RepoExt, Config};
+use crate::{config::ConfigType, git::repository::RepoExt, Config};
 use anyhow::Result;
 use git2::Repository;
 
-pub fn run(key: &str, value: &Option<String>) -> Result<()> {
+pub fn run(key: &str, value: &Option<String>, t: ConfigType) -> Result<()> {
     let repo = Repository::current()?;
-    let mut conf = Config::load(&repo);
+    let mut conf = match t {
+        ConfigType::Local => Config::load_local(&repo),
+        ConfigType::Global => Config::load_global(&repo),
+    };
 
     match key {
         "feature.prefix" => handle(&mut conf.data.feature.prefix, value),

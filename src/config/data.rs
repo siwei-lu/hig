@@ -30,4 +30,33 @@ impl Data {
             },
         }
     }
+
+    pub fn merge(&self, other: &Self) -> Self {
+        Self {
+            feature: Branch {
+                prefix: self.feature.prefix.clone().or(other.feature.prefix.clone()),
+                upstream: self
+                    .feature
+                    .upstream
+                    .clone()
+                    .or(other.feature.upstream.clone()),
+            },
+            hotfix: Branch {
+                prefix: self.hotfix.prefix.clone().or(other.hotfix.prefix.clone()),
+                upstream: self
+                    .hotfix
+                    .upstream
+                    .clone()
+                    .or(other.hotfix.upstream.clone()),
+            },
+            release: Branch {
+                prefix: self.release.prefix.clone().or(other.release.prefix.clone()),
+                upstream: self
+                    .release
+                    .upstream
+                    .clone()
+                    .or(other.release.upstream.clone()),
+            },
+        }
+    }
 }

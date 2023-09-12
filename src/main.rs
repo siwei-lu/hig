@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use hig::{cmd, BranchType};
+use hig::{cmd, BranchType, ConfigType};
 
 #[derive(Subcommand)]
 enum Commands {
@@ -41,6 +41,9 @@ enum Commands {
         key: String,
         /// The value to set
         value: Option<String>,
+
+        #[arg(short = 'g', long = "global", default_value_t = false)]
+        is_global: bool,
     },
 }
 
@@ -59,7 +62,19 @@ fn main() {
         Commands::Release { name } => cmd::branch::run(&name, BranchType::Release),
         Commands::Rm => cmd::rm::run(),
         Commands::Reset => cmd::reset::run(),
-        Commands::Config { key, value } => cmd::config::run(&key, &value),
+        Commands::Config {
+            key,
+            value,
+            is_global,
+        } => {
+            let t = if is_global {
+                ConfigType::Global
+            } else {
+                ConfigType::Local
+            };
+
+            cmd::config::run(&key, &value, t)
+        }
     };
 
     if let Err(e) = result {
