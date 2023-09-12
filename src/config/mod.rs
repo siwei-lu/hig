@@ -54,7 +54,7 @@ impl<'a> Config<'a> {
         let prefix = self.get_prefix(t);
 
         match prefix {
-            Some(prefix) => format!("{}/{}", prefix, name),
+            Some(prefix) => format!("{}{}", prefix, name),
             None => name.to_string(),
         }
     }
@@ -62,9 +62,8 @@ impl<'a> Config<'a> {
     fn get_prefix(&self, t: BranchType) -> Option<String> {
         match t {
             BranchType::Feature => self.data.feature.prefix.to_owned(),
-            // BranchType::Release => &self.data.release.prefix,
-            // BranchType::Hotfix => &self.data.hotfix.prefix,
-            _ => None,
+            BranchType::Release => self.data.release.prefix.to_owned(),
+            BranchType::Hotfix => self.data.hotfix.prefix.to_owned(),
         }
     }
 

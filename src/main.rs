@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use hig::cmd;
+use hig::{cmd, BranchType};
 
 #[derive(Subcommand)]
 enum Commands {
@@ -8,6 +8,20 @@ enum Commands {
     #[command(arg_required_else_help = true)]
     Feature {
         /// The name of the feature branch
+        name: String,
+    },
+
+    #[command(about = "Create a new hotfix branch")]
+    #[command(arg_required_else_help = true)]
+    Hotfix {
+        /// The name of the hotfix branch
+        name: String,
+    },
+
+    #[command(about = "Create a new release branch")]
+    #[command(arg_required_else_help = true)]
+    Release {
+        /// The name of the release branch
         name: String,
     },
 
@@ -40,7 +54,9 @@ struct Cli {
 fn main() {
     let cli = Cli::parse();
     let result = match cli.command {
-        Commands::Feature { name } => cmd::feature::run(&name),
+        Commands::Feature { name } => cmd::branch::run(&name, BranchType::Feature),
+        Commands::Hotfix { name } => cmd::branch::run(&name, BranchType::Hotfix),
+        Commands::Release { name } => cmd::branch::run(&name, BranchType::Release),
         Commands::Rm => cmd::rm::run(),
         Commands::Reset => cmd::reset::run(),
         Commands::Config { key, value } => cmd::config::run(&key, &value),

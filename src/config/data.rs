@@ -9,12 +9,22 @@ pub struct Branch {
 #[derive(Deserialize, Serialize)]
 pub struct Data {
     pub feature: Branch,
+    pub hotfix: Branch,
+    pub release: Branch,
 }
 
 impl Data {
     pub fn default() -> Self {
         Self {
             feature: Branch {
+                prefix: None,
+                upstream: None,
+            },
+            hotfix: Branch {
+                prefix: None,
+                upstream: None,
+            },
+            release: Branch {
                 prefix: None,
                 upstream: None,
             },
