@@ -1,6 +1,11 @@
 use git2::Repository;
 use nanoid::nanoid;
-use std::{env::temp_dir, fs, path::PathBuf};
+use std::{
+    env::temp_dir,
+    fs,
+    panic::{catch_unwind, UnwindSafe},
+    path::PathBuf,
+};
 
 fn random_path() -> PathBuf {
     temp_dir().join(nanoid!())
@@ -23,8 +28,9 @@ fn clear_repo(repo: Repository) {
     fs::remove_dir_all(path).unwrap();
 }
 
-pub fn repo<F: FnOnce(&Repository)>(runner: F) {
+pub fn repo<F: FnOnce(&Repository) + UnwindSafe>(runner: F) {
     let repo = random_repo();
-    runner(&repo);
+    let result = catch_unwind(|| runner(&repo));
     clear_repo(repo);
+    assert!(result.is_ok());
 }
