@@ -1,7 +1,7 @@
 use anyhow::Result;
 use git2::Repository;
 
-use crate::git::repository::RepoExt;
+use crate::git::{self, repository::RepoExt};
 
 pub fn run() -> Result<()> {
     let repo = Repository::current()?;
@@ -9,5 +9,8 @@ pub fn run() -> Result<()> {
     let mut head = repo.head_branch()?;
 
     repo.checkout(&master)?;
-    head.delete().map_err(Into::into)
+    head.delete()?;
+
+    git::ggu()?;
+    Ok(())
 }
