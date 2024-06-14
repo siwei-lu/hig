@@ -6,7 +6,7 @@ pub fn ggu() -> Result<()>  {
     Command::new("git")
         .arg("pull")
         .arg("--rebase")
-        .output()?;
+        .spawn()?;
 
     Ok(())
 }
