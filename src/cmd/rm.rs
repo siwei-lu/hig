@@ -15,10 +15,10 @@ pub fn run() -> Result<()> {
         let conf = Config::load(&repo);
         let base = conf.data.feature.base;
 
-        if let Some(base) = base {
-            repo.find_branch(&base, git2::BranchType::Local)?
-        } else {
-            master
+        match base {
+            Some(base) if &base == head.name()?.unwrap_or("") => master,
+            Some(base) => repo.find_branch(&base, git2::BranchType::Local)?,
+            None => master,
         }
     };
 
