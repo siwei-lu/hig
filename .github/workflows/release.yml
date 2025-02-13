@@ -25,7 +25,7 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-artifact@v4.6.0
               with:
-                  name: ${{ matrix.os }}-binary
+                  name: ${{ matrix.os }}
                   path: target/release/
 
     release:
@@ -35,12 +35,11 @@ jobs:
             - name: Download artifacts
               uses: actions/download-artifact@v4.1.8
               with:
-                  name: ${{ matrix.os }}-binary
                   path: ./artifacts
             - name: Create a Release
               uses: elgohr/Github-Release-Action@v5
               env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                title: hig
-                workdir: ./artifacts
+                  title: hig
+                  workdir: ./artifacts
