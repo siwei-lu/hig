@@ -26,7 +26,7 @@ jobs:
               uses: actions/upload-artifact@v4.6.0
               with:
                   name: ${{ matrix.os }}
-                  path: ./artifacts
+                  path: ${{ matrix.os == 'windows-latest' && 'target/release/hig.exe' || 'target/release/hig' }}
 
     release:
         needs: build
@@ -42,7 +42,7 @@ jobs:
             - name: Download artifacts
               uses: actions/download-artifact@v4.1.8
               with:
-                  path: ./artifacts
+                  path: '**/hig*'
 
             - name: Create a Release
               uses: marvinpinto/action-automatic-releases@latest
@@ -50,4 +50,4 @@ jobs:
                   repo_token: ${{ secrets.GITHUB_TOKEN }}
                   automatic_release_tag: latest
                   prerelease: false
-                  files: ./artifacts/*
+                  files: '**/hig*'
