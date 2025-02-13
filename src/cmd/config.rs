@@ -14,10 +14,13 @@ pub fn run(key: &str, value: &Option<String>, t: ConfigType) -> Result<()> {
     match key {
         "feature.prefix" => handle(&mut conf.data.feature.prefix, value),
         "feature.upstream" => handle(&mut conf.data.feature.upstream, value),
+        "feature.base" => handle(&mut conf.data.feature.base, value),
         "hotfix.prefix" => handle(&mut conf.data.hotfix.prefix, value),
         "hotfix.upstream" => handle(&mut conf.data.hotfix.upstream, value),
+        "hotfix.base" => handle(&mut conf.data.hotfix.base, value),
         "release.prefix" => handle(&mut conf.data.release.prefix, value),
         "release.upstream" => handle(&mut conf.data.release.upstream, value),
+        "release.base" => handle(&mut conf.data.release.base, value),
         _ => {
             return Ok(());
         }

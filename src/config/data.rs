@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct Branch {
     pub prefix: Option<String>,
     pub upstream: Option<String>,
+    pub base: Option<String>,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -19,14 +20,17 @@ impl Data {
             feature: Branch {
                 prefix: None,
                 upstream: None,
+                base: None,
             },
             hotfix: Branch {
                 prefix: None,
                 upstream: None,
+                base: None,
             },
             release: Branch {
                 prefix: None,
                 upstream: None,
+                base: None,
             },
         }
     }
@@ -40,6 +44,7 @@ impl Data {
                     .upstream
                     .clone()
                     .or(other.feature.upstream.clone()),
+                base: self.feature.base.clone().or(other.feature.base.clone()),
             },
             hotfix: Branch {
                 prefix: self.hotfix.prefix.clone().or(other.hotfix.prefix.clone()),
@@ -48,6 +53,7 @@ impl Data {
                     .upstream
                     .clone()
                     .or(other.hotfix.upstream.clone()),
+                base: self.feature.base.clone().or(other.feature.base.clone()),
             },
             release: Branch {
                 prefix: self.release.prefix.clone().or(other.release.prefix.clone()),
@@ -56,6 +62,7 @@ impl Data {
                     .upstream
                     .clone()
                     .or(other.release.upstream.clone()),
+                base: self.feature.base.clone().or(other.feature.base.clone()),
             },
         }
     }
